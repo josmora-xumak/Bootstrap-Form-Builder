@@ -25,7 +25,7 @@ define([
         , collection: new SnippetsCollection(JSON.parse(inputJSON))
       });
       new TabView({
-        title: "Radios / Checkboxes"
+        title: "Radio / Checkbox"
         , collection: new SnippetsCollection(JSON.parse(radioJSON))
       });
       new TabView({
