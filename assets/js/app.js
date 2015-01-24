@@ -3,18 +3,23 @@ define([
        , "collections/snippets" , "collections/my-form-snippets"
        , "views/tab" , "views/my-form"
        , "text!data/input.json", "text!data/radio.json", "text!data/select.json", "text!data/buttons.json"
+       , "text!data/containers.json"
        , "text!templates/app/render.html",  "text!templates/app/about.html", 
 ], function(
   $, _, Backbone
   , SnippetsCollection, MyFormSnippetsCollection
   , TabView, MyFormView
-  , inputJSON, radioJSON, selectJSON, buttonsJSON
+  , inputJSON, radioJSON, selectJSON, buttonsJSON, containersJSON
   , renderTab, aboutTab
 ){
   return {
     initialize: function(){
 
       //Bootstrap tabs from json.
+      new TabView({
+        title: "Containers"
+            , collection: new SnippetsCollection(JSON.parse(containersJSON))
+      });
       new TabView({
         title: "Input"
         , collection: new SnippetsCollection(JSON.parse(inputJSON))
