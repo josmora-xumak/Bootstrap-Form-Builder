@@ -1,20 +1,25 @@
 define([
        "jquery", "underscore", "backbone"
-      , "views/temp-snippet"
+      , "views/temp-snippet-view"
       , "helper/pubsub"
       , "text!templates/app/renderform.html"
+      , "views/row-container-view"
+      , "collections/rowcontainer-collection"
 ], function(
   $, _, Backbone
   , TempSnippetView
   , PubSub
   , _renderForm
+  , RowContainerView
+  , RowContainerCollection
 ){
   return Backbone.View.extend({
     tagName: "fieldset"
     , initialize: function(){
-      this.collection.on("add", this.render, this);
+      //this.collection.on("add", this.render, this);
       this.collection.on("remove", this.render, this);
       this.collection.on("change", this.render, this);
+      PubSub.on("UniqueIdGiven", this.prepare_render, this);
       PubSub.on("mySnippetDrag", this.handleSnippetDrag, this);
       PubSub.on("tempMove", this.handleTempMove, this);
       PubSub.on("tempDrop", this.handleTempDrop, this);
@@ -24,7 +29,20 @@ define([
       this.renderForm = _.template(_renderForm);
       this.render();
     }
-
+  	, prepare_render: function(snippet){
+  		this.render();
+  		var snippetType = snippet.attributes.fields.id.type;
+  		if (snippetType == "rowcontainer") {
+      	  //initialize row-container view
+  		  if (typeof(snippet.row_container_views) == 'undefined') {
+  			snippet.row_container_views = {}
+  		  } 
+  		  if (!(snippet in snippet.row_container_views)){
+  			  var rcv = new RowContainerView({model: snippet, collection: new RowContainerCollection([])});
+  			  snippet.row_container_views[snippet] = rcv
+  		  }
+  		}
+  	}
     , render: function(){
       //Render Snippet Views
       this.$el.empty();
@@ -37,7 +55,7 @@ define([
         multipart: this.collection.containsFileType(),
         text: _.map(this.collection.renderAllClean(), function(e){return e.html()}).join("\n")
       }));
-      this.$el.appendTo("#build form");
+      this.$el.appendTo("#build div#target");
       this.delegateEvents();
     }
 
@@ -66,10 +84,10 @@ define([
 
     , handleTempMove: function(mouseEvent){
       $(".target").removeClass("target");
-      if(mouseEvent.pageX >= this.buildBCR.left &&
-          mouseEvent.pageX < (this.$build.width() + this.buildBCR.left) &&
-          mouseEvent.pageY >= this.buildBCR.top &&
-          mouseEvent.pageY < (this.$build.height() + this.buildBCR.top)){
+      if(mouseEvent.pageX >= this.$el.offset().left &&
+  	     mouseEvent.pageX < (this.$el.offset().left + this.$el.width()) &&
+         mouseEvent.pageY >= this.$el.offset().top &&
+         mouseEvent.pageY < (this.$el.offset().top + this.$el.height())){
         $(this.getBottomAbove(mouseEvent.pageY)).addClass("target");
       } else {
         $(".target").removeClass("target");
@@ -77,10 +95,10 @@ define([
     }
 
     , handleTempDrop: function(mouseEvent, model, index){
-      if(mouseEvent.pageX >= this.buildBCR.left &&
-         mouseEvent.pageX < (this.$build.width() + this.buildBCR.left) &&
-         mouseEvent.pageY >= this.buildBCR.top &&
-         mouseEvent.pageY < (this.$build.height() + this.buildBCR.top)) {
+    	if(mouseEvent.pageX >= this.$el.offset().left &&
+	       mouseEvent.pageX < (this.$el.offset().left + this.$el.width()) &&
+           mouseEvent.pageY >= this.$el.offset().top &&
+           mouseEvent.pageY < (this.$el.offset().top + this.$el.height())){
         var index = $(".target").index();
         $(".target").removeClass("target");
         this.collection.add(model,{at: index+1});

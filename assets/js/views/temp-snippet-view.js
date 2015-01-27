@@ -1,6 +1,6 @@
 define([
        "jquery"
-       , "views/snippet"
+       , "views/snippet-view"
        , "text!templates/app/temp.html"
        , "helper/pubsub"
 ], function(
@@ -41,7 +41,10 @@ define([
         this.tempContainerBCR.left) + "px";
       // Make sure the element has been drawn and
       // has height in the dom before triggering.
-      PubSub.trigger("tempMove", mouseEvent);
+      PubSub.trigger("tempMove-row", mouseEvent);
+      if (!mouseEvent.isPropagationStopped()){
+    	  PubSub.trigger("tempMove", mouseEvent);
+      }
     }
     , mouseMoveHandler: function(mouseEvent) {
       mouseEvent.preventDefault();
@@ -49,7 +52,10 @@ define([
     }
     , mouseUpHandler: function(mouseEvent){
       mouseEvent.preventDefault();
-      PubSub.trigger("tempDrop", mouseEvent, this.model);
+      PubSub.trigger("tempDrop-row", mouseEvent, this.model);
+      if (!mouseEvent.isPropagationStopped()){
+    	  PubSub.trigger("tempDrop", mouseEvent, this.model);
+      }
       this.remove();
     }
   });

@@ -42,14 +42,26 @@ define([
         "popoverTemplates": that.popoverTemplates
       });
       if (withAttributes) {
-        return this.$el.html(
+    	var content = this.$el.html(
           that.template(that.model.getValues())
         ).attr({
           "data-content"     : content
           , "data-title"     : that.model.get("title")
           , "data-trigger"   : "manual"
           , "data-html"      : true
+          , "data-container" : "body"
         });
+    	if (typeof(this.model.row_container_views) != 'undefined'){
+    		var $current_row_container = $("#" + this.model.attributes.fields.id.value, content);
+    		_.each(this.model.row_container_views, function(rcv, key){
+    			var current_view_html = rcv.$el;
+    			current_view_html.appendTo($current_row_container);
+    		});
+    		
+    	}
+    	
+    	
+    	return content;
       } else {
         return this.$el.html(
           that.template(that.model.getValues())

@@ -1,7 +1,7 @@
 define([
        "jquery" , "underscore" , "backbone"
-       , "collections/snippets" , "collections/my-form-snippets"
-       , "views/tab" , "views/my-form"
+       , "collections/snippets-collection" , "collections/form-snippets-collection"
+       , "views/tab-view" , "views/form-view"
        , "text!data/input.json", "text!data/radio.json", "text!data/select.json", "text!data/buttons.json"
        , "text!data/containers.json"
        , "text!templates/app/render.html",  "text!templates/app/about.html", 

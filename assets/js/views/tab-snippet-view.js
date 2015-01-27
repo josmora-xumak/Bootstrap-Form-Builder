@@ -1,7 +1,7 @@
 define([
        "jquery", "underscore", "backbone"
-       , "models/snippet"
-       , "views/snippet", "views/temp-snippet"
+       , "models/snippet-model"
+       , "views/snippet-view", "views/temp-snippet-view"
        , "helper/pubsub"
 ], function(
   $, _, Backbone

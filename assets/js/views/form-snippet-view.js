@@ -1,6 +1,6 @@
 define([
        "jquery", "underscore", "backbone",
-       "views/snippet", "views/temp-snippet",
+       "views/snippet-view", "views/temp-snippet-view",
        "helper/pubsub"
 ], function(
   $, _, Backbone,
@@ -15,8 +15,8 @@ define([
     }
 
     , mouseDownHandler : function(mouseDownEvent){
-      mouseDownEvent.stopPropagation();
       mouseDownEvent.preventDefault();
+      mouseDownEvent.stopPropagation();
       var that = this;
       //popover
       $(".popover").remove();
@@ -31,7 +31,10 @@ define([
             Math.abs(mouseDownEvent.pageY - mouseMoveEvent.pageY) > 10
           ){
             that.$el.popover('destroy');
-            PubSub.trigger("mySnippetDrag", mouseDownEvent, that.model);
+            PubSub.trigger("mySnippetDrag-row", mouseDownEvent, that.model);
+            if (typeof(mouseDownEvent._skip_event)=='undefined'){
+            	PubSub.trigger("mySnippetDrag", mouseDownEvent, that.model);
+            }
             that.mouseUpHandler();
           };
         });
@@ -50,9 +53,8 @@ define([
     , saveHandler : function(boundContext) {
       return function(mouseEvent) {
         mouseEvent.preventDefault();
-        var fields = $(".popover .field");
+        var fields = $(".popover input.form-control");
         _.each(fields, function(e){
-
           var $e = $(e)
           , type = $e.attr("data-type")
           , name = $e.attr("id");

@@ -1,13 +1,19 @@
 define([
        "jquery" , "underscore" , "backbone"
-       , "models/snippet"
-       , "collections/snippets"
-       , "views/my-form-snippet"
+       , "models/snippet-model"
+       , "collections/snippets-collection"
+       , "views/form-snippet-view"
+       , "views/row-container-view"
+       , "collections/rowcontainer-collection"
+       , "helper/pubsub"
 ], function(
   $, _, Backbone
   , SnippetModel
   , SnippetsCollection
   , MyFormSnippetView
+  , RowContainerView
+  , RowContainerCollection
+  , PubSub
 ){
   return SnippetsCollection.extend({
     model: SnippetModel
@@ -34,6 +40,7 @@ define([
       if(typeof snippet.get("fields")["id2"] !== "undefined") {
         snippet.setField("id2", snippetType + "2-" + this.counter[snippetType]);
       }
+      PubSub.trigger("UniqueIdGiven", snippet);
     }
     , containsFileType: function(){
       return !(typeof this.find(function(snippet){
