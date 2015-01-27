@@ -23,6 +23,7 @@ define([
       PubSub.on("mySnippetDrag", this.handleSnippetDrag, this);
       PubSub.on("tempMove", this.handleTempMove, this);
       PubSub.on("tempDrop", this.handleTempDrop, this);
+      PubSub.on("rowContainerRendered", this.render_controls, this);
       this.$build = $("#build");
       this.build = document.getElementById("build");
       this.buildBCR = this.build.getBoundingClientRect();
@@ -43,6 +44,16 @@ define([
   		  }
   		}
   	}
+  	, render_controls: function(){
+  		var that = this;
+  		var rendered_collection = this.collection.renderAllClean();
+        var text = _.map(rendered_collection, function(e){return e.html()}).join("\n")
+        var rendered = that.renderForm({
+            multipart: this.collection.containsFileType(),
+            text: text
+          })
+        $("#render").val(rendered);
+  	}
     , render: function(){
       //Render Snippet Views
       this.$el.empty();
@@ -51,10 +62,16 @@ define([
       _.each(this.collection.renderAll(), function(snippet){
         that.$el.append(snippet);
       });
-      $("#render").val(that.renderForm({
-        multipart: this.collection.containsFileType(),
-        text: _.map(this.collection.renderAllClean(), function(e){return e.html()}).join("\n")
-      }));
+      
+      var rendered_collection = this.collection.renderAllClean();
+      var text = _.map(rendered_collection, function(e){return e.html()}).join("\n")
+      var rendered = that.renderForm({
+          multipart: this.collection.containsFileType(),
+          text: text
+        })
+      $("#render").val(rendered);
+      
+
       this.$el.appendTo("#build div#target");
       this.delegateEvents();
     }

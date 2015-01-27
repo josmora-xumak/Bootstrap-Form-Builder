@@ -57,15 +57,23 @@ define([
     			var current_view_html = rcv.$el;
     			current_view_html.appendTo($current_row_container);
     		});
-    		
     	}
-    	
-    	
     	return content;
       } else {
-        return this.$el.html(
+        var content = this.$el.html(
           that.template(that.model.getValues())
-        )
+        );
+         /* render components in the row-container */
+         if (typeof(this.model.row_container_views) != 'undefined'){
+    		var $current_row_container = $("#" + this.model.attributes.fields.id.value, content);
+    		_.each(this.model.row_container_views, function(rcv, key){
+    			var current_view_html = rcv.$el.clone();
+    			var current_component = $('div.form-group', current_view_html)
+    			current_component.appendTo($current_row_container);
+    		});
+    	}
+
+        return content;
       }
     }
   });
