@@ -1,8 +1,8 @@
 <!-- Text input-->
 <div class="form-group">
-  <label class="control-label" for="<%- id %>"><%- label %></label>
+  <label class="control-label" for="id_<%- name %>"><%- label %></label>
   <div class="">
-    <input id="<%- id %>" name="<%- id %>" type="text" placeholder="<%- placeholder %>" class="form-control <%- inputsize %>" <% if(required) {%> required <% } %> />
-    <% if (helptext.length > 0) { %><span class="help-block"><%= helptext %></span><% } %>
+    <input id="id_<%- name %>" name="<%- name %>" type="text" placeholder="<%- placeholder %>" class="form-control" <% if(required) {%> required <% } %> />
+    
   </div>
 </div>
