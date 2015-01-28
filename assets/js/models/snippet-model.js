@@ -16,7 +16,10 @@ define([
       }, {});
     }
     , idFriendlyTitle: function(){
-      return this.get("title").replace(/\W/g,'').toLowerCase();
+    	if (this.get("type")){
+    		return this.get("type").replace(/\W/g,'').toLowerCase();
+    	}
+    	return this.get("title").replace(/\W/g,'').toLowerCase();
     }
     , setField: function(name, value) {
       var fields = this.get("fields")
