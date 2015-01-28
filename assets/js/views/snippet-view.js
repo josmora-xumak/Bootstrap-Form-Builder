@@ -8,7 +8,7 @@ define([
   , "text!templates/popover/popover-checkbox.html"
   , "text!templates/popover/popover-rowcontainer.html"
   , "templates/snippet/snippet-templates"
-  , "bootstrap"
+  //, "bootstrap"
 ], function(
   $, _, Backbone
   , _PopoverMain

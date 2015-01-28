@@ -1,5 +1,9 @@
 require.config({
-  baseUrl: "assets/js/lib/"
+  baseUrl: window.form_builder_baseUrl
+  , map: {
+      '*': { 'jquery': 'jquery-private' },
+      'jquery-private': { 'jquery': 'jquery' }
+    }
   , shim: {
     'backbone': {
       deps: ['underscore', 'jquery'],

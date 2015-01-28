@@ -18,7 +18,7 @@ define([
       mouseDownEvent.stopPropagation();
       //hide all popovers
       $(".popover").hide();
-      $("body").append(new TempSnippetView({model: new SnippetModel($.extend(true,{},this.model.attributes))}).render());
+      $(window.form_builder_temp_container).append(new TempSnippetView({model: new SnippetModel($.extend(true,{},this.model.attributes))}).render());
       PubSub.trigger("newTempPostRender", mouseDownEvent);
     }
   });

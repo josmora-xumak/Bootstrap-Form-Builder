@@ -22,16 +22,7 @@
 </head>
 
 <body>
-    <a href="https://github.com/minikomi/Bootstrap-Form-Builder/"><img style="z-index: 100000; position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_red_aa0000.png" alt="Fork me on GitHub"></a>
-    <nav class="navbar navbar-default navbar-fixed-top navbar-inverse" role="navigation">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="./">Bootstrap Form Builder</a>
-            </div>
-        </div>
-    </nav>
     <div class="container">
-
         <div class="row clearfix">
             <!-- Building Form. -->
             <div class="col-md-8 clearfix">
@@ -46,7 +37,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="row save-button-row">
                     <div class="col-md-12 form-group">
                         <input id="save-button" type="button" class="btn btn-info" value="Save" />
@@ -54,10 +44,8 @@
                         <input id="cancel-button" type="button" class="btn btn-danger" value="Cancel" />
                     </div>
                 </div>
-
             </div>
             <!-- / Building Form. -->
-
             <!-- Components -->
             <div class="col-md-4">
                 <h2>Drag & Drop components</h2>
@@ -77,18 +65,12 @@
             </div>
             <!-- / Components -->
         </div>
-
-        <div class="row clearfix">
-            <div class="col-md-12">
-                <hr>
-                By Adam Moore (<a href="http://twitter.com/minikomi" >@minikomi</a>).<br/>
-                Migrated to Bootstrap 3.0 by Victor Rodríguez (<a href="http://twitter.com/7ictor" >@7ictor</a>).<br/>
-                Source on (<a href="https://github.com/7ictor/Bootstrap-Form-Builder" >Github</a>).
-            </div>
-        </div>
-
     </div> <!-- /container -->
-
+    <script type="text/javascript" src="assets/js/lib/jquery.js"></script>
+    <script type="text/javascript">
+		window.form_builder_baseUrl = "assets/js/lib/";
+		window.form_builder_temp_container = "body";
+	</script>
     <script data-main="assets/js/main.js" src="assets/js/lib/require.js" ></script>
 </body>
 </html>
