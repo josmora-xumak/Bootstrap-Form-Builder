@@ -68,8 +68,8 @@ define([
     		var $current_row_container = $("#" + this.model.attributes.fields.id.value, content);
     		_.each(this.model.row_container_views, function(rcv, key){
     			var current_view_html = rcv.$el.clone();
-    			var current_component = $('div.form-group', current_view_html)
-    			current_component.appendTo($current_row_container);
+    			var current_view_groups = $('div.form-group', current_view_html).unwrap();
+    			current_view_html.appendTo($current_row_container);
     		});
     	}
 
