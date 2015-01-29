@@ -52,24 +52,31 @@ define([
         , content: aboutTab
       });
        */
+
       //Make the first tab active!
       $("#components .tab-pane").first().addClass("active");
       $("#formtabs li").first().addClass("active");
-      // Bootstrap "My Form" with 'Form Name' snippet.
-      new MyFormView({
-        title: "Original"
-        , collection: new MyFormSnippetsCollection([
-          { "title" : "Form Name"
-            , "fields": {
-              "name" : {
-                "label"   : "Form Name"
-                , "type"  : "input"
-                , "value" : "Form Name"
-              }
-            }
-          }
-        ])
-      });
+      if (window.form_builder_initial_data){
+    	  new MyFormView({
+              title: "Original"
+              , collection: new MyFormSnippetsCollection([window.form_builder_initial_data])
+            });
+      } else {
+    	  new MyFormView({
+    	        title: "Original"
+    	        , collection: new MyFormSnippetsCollection([
+    	          { "title" : "Form Name"
+    	            , "fields": {
+    	              "name" : {
+    	                "label"   : "Form Name"
+    	                , "type"  : "input"
+    	                , "value" : "Form Name"
+    	              }
+    	            }
+    	          }
+    	        ])
+    	      });
+      }
     }
   }
 });

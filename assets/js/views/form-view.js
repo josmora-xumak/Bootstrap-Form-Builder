@@ -53,6 +53,9 @@ define([
             text: text
           })
         $("#render").val(rendered);
+        
+        var rendered_collection_json = this.collection.renderAllJSON();
+        $("#render_json").val(rendered_collection_json);
   	}
     , render: function(){
       //Render Snippet Views
@@ -62,7 +65,6 @@ define([
       _.each(this.collection.renderAll(), function(snippet){
         that.$el.append(snippet);
       });
-      
       var rendered_collection = this.collection.renderAllClean();
       var text = _.map(rendered_collection, function(e){return e.html()}).join("\n")
       var rendered = that.renderForm({
@@ -70,7 +72,9 @@ define([
           text: text
         })
       $("#render").val(rendered);
-      
+
+      var rendered_collection_json = this.collection.renderAllJSON();
+      $("#render_json").val(rendered_collection_json);
 
       this.$el.appendTo("#build div#target");
       this.delegateEvents();

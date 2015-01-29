@@ -17,7 +17,7 @@ define([
 ){
   return SnippetsCollection.extend({
     model: SnippetModel
-    , initialize: function() {
+    , initialize: function(models) {
       this.counter = {};
       this.on("add", this.giveUniqueId);
     }
@@ -57,5 +57,10 @@ define([
         return new MyFormSnippetView({model: snippet}).render(false);
       });
     }
+    , renderAllJSON: function(){
+        return this.map(function(snippet){
+          return new MyFormSnippetView({model: snippet}).render(false, true);
+        });
+      }
   });
 });

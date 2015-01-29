@@ -39,13 +39,8 @@ define([
     	snippet = that.wrap_in_column(snippet, collection_length)
         that.$el.append(snippet);
       });
-      /*$("#render").val(that.renderForm({
-        multipart: this.collection.containsFileType(),
-        text: _.map(this.collection.renderAllClean(), function(e){return e.html()}).join("\n")
-      }));*/
       this.$el.appendTo("#" + this.model.attributes.fields.id.value);
       this.delegateEvents();
-      //this.model.collection.renderAll()
       PubSub.trigger("rowContainerRendered");
     }
 
