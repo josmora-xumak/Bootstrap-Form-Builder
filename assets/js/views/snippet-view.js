@@ -8,6 +8,8 @@ define([
   , "text!templates/popover/popover-checkbox.html"
   , "text!templates/popover/popover-rowcontainer.html"
   , "templates/snippet/snippet-templates"
+  , "models/snippet-model"
+  , "views/row-container-view"
   //, "bootstrap"
 ], function(
   $, _, Backbone
@@ -19,6 +21,8 @@ define([
   , _PopoverCheckbox
   , _PopoverRowcontainer
   , _snippetTemplates
+  , SnippetModel
+  , RowContainerView
 ){
   return Backbone.View.extend({
     tagName: "div"
@@ -34,7 +38,7 @@ define([
         , "rowcontainer" : _.template(_PopoverRowcontainer)
       }
     }
-    , render: function(withAttributes){
+    , render: function(withAttributes, renderJSON){
       var that = this;
       var content = _.template(_PopoverMain)({
         "title": that.model.get("title"),
@@ -57,8 +61,32 @@ define([
     			var current_view_html = rcv.$el;
     			current_view_html.appendTo($current_row_container);
     		});
+    	} else if (this.model.attributes.collection) {
+    		// initializing with nested collections
+    		var $current_row_container = $("#" + this.model.attributes.fields.id.value, content);
+    		//$('<div class="fb-subtarget row"></div>').appendTo($current_row_container);
+    		//$current_row_container = $current_row_container.find("div.fb-subtarget.row", $current_row_container);
+    		this.model.row_container_views = {};
+    		var RowContainerCollection = require("collections/rowcontainer-collection");
+    		var rcv = new RowContainerView({model: this.model, collection: new RowContainerCollection(this.model.attributes.collection)});
+    		this.model.row_container_views[this.model] = rcv;
+    		var current_view_html = rcv.$el;
+    		current_view_html.appendTo($current_row_container);
     	}
     	return content;
+      } else if(renderJSON){
+    	  var json = this.model.toJSON();
+    	  if (typeof(this.model.row_container_views) != 'undefined'){
+    		  var collection = JSON.parse('[]');
+    		  _.each(this.model.row_container_views, function(rcv, key){
+    			  var collection_json = rcv.collection.toJSON();
+    			  _.each(collection_json, function(v, k){
+    				  collection.push(v);
+    			  });
+    		  });
+    		  json["collection"] = collection;
+    	  }
+    	  return JSON.stringify(json);
       } else {
         var content = this.$el.html(
           that.template(that.model.getValues())
@@ -67,6 +95,7 @@ define([
          if (typeof(this.model.row_container_views) != 'undefined'){
     		var $current_row_container = $("#" + this.model.attributes.fields.id.value, content);
     		_.each(this.model.row_container_views, function(rcv, key){
+    			
     			var current_view_html = rcv.$el.clone();
     			var current_view_groups = $('div.form-group', current_view_html).unwrap();
     			current_view_html.appendTo($current_row_container);
