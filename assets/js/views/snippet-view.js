@@ -10,7 +10,7 @@ define([
   , "templates/snippet/snippet-templates"
   , "models/snippet-model"
   , "views/row-container-view"
-  //, "bootstrap"
+  , "bootstrap"
 ], function(
   $, _, Backbone
   , _PopoverMain
@@ -55,17 +55,24 @@ define([
           , "data-html"      : true
           , "data-container" : "body"
         });
+
+    	// render drop target
+		var wrapper = $("<div></div>");
+		var $drop_target_bottom = $("<div class='drop_target'><span class='glyphicon glyphicon-plus-sign'></span></div>");
+		wrapper.append(content);
+		wrapper.append($drop_target_bottom);
+		content = wrapper;
+
     	if (typeof(this.model.row_container_views) != 'undefined'){
     		var $current_row_container = $("#" + this.model.attributes.fields.id.value, content);
     		_.each(this.model.row_container_views, function(rcv, key){
+    			rcv.render();
     			var current_view_html = rcv.$el;
     			current_view_html.appendTo($current_row_container);
     		});
     	} else if (this.model.attributes.collection) {
     		// initializing with nested collections
     		var $current_row_container = $("#" + this.model.attributes.fields.id.value, content);
-    		//$('<div class="fb-subtarget row"></div>').appendTo($current_row_container);
-    		//$current_row_container = $current_row_container.find("div.fb-subtarget.row", $current_row_container);
     		this.model.row_container_views = {};
     		var RowContainerCollection = require("collections/rowcontainer-collection");
     		var rcv = new RowContainerView({model: this.model, collection: new RowContainerCollection(this.model.attributes.collection)});

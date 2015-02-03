@@ -31,18 +31,24 @@ define([
       this.render();
     }
   	, prepare_render: function(snippet){
+  		_.map(this.collection.models, function(snippet, k){
+  			if (snippet.attributes.fields.id) {
+	  			var snippetType = snippet.attributes.fields.id.type;
+	  	  		if (snippetType == "rowcontainer") {
+	  	      	  //initialize row-container view
+	  	  		  if (typeof(snippet.row_container_views) == 'undefined') {
+	  	  			snippet.row_container_views = {}
+	  	  		  } 
+	  	  		  if (!(snippet in snippet.row_container_views)){
+	  	  			  var rcv = new RowContainerView({model: snippet, collection: new RowContainerCollection([])});
+	  	  			  snippet.row_container_views[snippet] = rcv;
+	  	  		  } else {
+	  	  			snippet.row_container_views[snippet].delegateEvents();
+	  	  		  }
+	  	  		}
+  			}
+  		});
   		this.render();
-  		var snippetType = snippet.attributes.fields.id.type;
-  		if (snippetType == "rowcontainer") {
-      	  //initialize row-container view
-  		  if (typeof(snippet.row_container_views) == 'undefined') {
-  			snippet.row_container_views = {}
-  		  } 
-  		  if (!(snippet in snippet.row_container_views)){
-  			  var rcv = new RowContainerView({model: snippet, collection: new RowContainerCollection([])});
-  			  snippet.row_container_views[snippet] = rcv
-  		  }
-  		}
   	}
   	, render_controls: function(){
   		var that = this;
@@ -80,10 +86,10 @@ define([
       this.delegateEvents();
     }
 
-    , getBottomAbove: function(eventY){
-      var myFormBits = $(this.$el.find(".component"));
+    , getTarget: function(eventX, eventY){
+      var myFormBits = $(this.$el.find(".drop_target"));
       var topelement = _.find(myFormBits, function(renderedSnippet) {
-        if (($(renderedSnippet).position().top + $(renderedSnippet).height()) > eventY  - 160) {
+    	if (eventY >= $(renderedSnippet).position().top  && eventY <= ($(renderedSnippet).position().top + $(renderedSnippet).height())) {
           return true;
         }
         else {
@@ -92,8 +98,6 @@ define([
       });
       if (topelement){
         return topelement;
-      } else {
-        return myFormBits[0];
       }
     }
 
@@ -104,28 +108,24 @@ define([
     }
 
     , handleTempMove: function(mouseEvent){
-      $(".target").removeClass("target");
+      $(".drop_target").removeClass("hovered");
       if(mouseEvent.pageX >= this.$el.offset().left &&
   	     mouseEvent.pageX < (this.$el.offset().left + this.$el.width()) &&
          mouseEvent.pageY >= this.$el.offset().top &&
          mouseEvent.pageY < (this.$el.offset().top + this.$el.height())){
-        $(this.getBottomAbove(mouseEvent.pageY)).addClass("target");
+        var target = $(this.getTarget(mouseEvent.pageX, mouseEvent.pageY));
+        if (target){target.addClass('hovered');}
       } else {
-        $(".target").removeClass("target");
+        $(".drop_target").removeClass("hovered");
       }
     }
 
     , handleTempDrop: function(mouseEvent, model, index){
-    	if(mouseEvent.pageX >= this.$el.offset().left &&
-	       mouseEvent.pageX < (this.$el.offset().left + this.$el.width()) &&
-           mouseEvent.pageY >= this.$el.offset().top &&
-           mouseEvent.pageY < (this.$el.offset().top + this.$el.height())){
-        var index = $(".target").index();
-        $(".target").removeClass("target");
-        this.collection.add(model,{at: index+1});
-      } else {
-        $(".target").removeClass("target");
-      }
+        var index = $(".drop_target:not(.drop_sub_target)").index($(".drop_target.hovered"));
+        if (index>-1){
+        	$(".drop_target").removeClass("hovered");
+        	this.collection.add(model,{at: index+1});
+        }
     }
   })
 });
