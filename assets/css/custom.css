@@ -160,6 +160,7 @@ div.drop_target {
   background-color: #74A6B5;
   border: 1px dashed #CCC;
   text-align: center;
+  visibility: hidden;
 }
 
 div.drop_sub_target {
@@ -168,8 +169,14 @@ div.drop_sub_target {
   line-height: 74px;
   padding-left:0px;
   padding-right:0px;
+  visibility: hidden;
 }
 
 div.drop_target.hovered {
   background-color: #CEE4EA;	
+  visibility: visible;
+}
+
+.fb-subtarget.hovered {
+  background-color: #CEE4EA;
 }

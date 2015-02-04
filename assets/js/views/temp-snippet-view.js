@@ -37,19 +37,11 @@ define([
 		        , "textarea-split" : _.template(_PopoverTextAreaSplit)
 		        , "checkbox" : _.template(_PopoverCheckbox)
 		        , "rowcontainer" : _.template(_PopoverRowcontainer)
+		        , "panelcontainer" : _.template(_PopoverRowcontainer)
 		      }
 		      this.tempTemplate = _.template(_tempTemplate);
     		}
-  
-    /* initialize: function(){
-      PubSub.on("newTempPostRender", this.postRender, this);
-      this.constructor.__super__.initialize.call(this);
-      this.tempTemplate = _.template(_tempTemplate);
-    }*/
     , className: "temp"
-    //, render: function() {
-    //  return this.$el.html(this.tempTemplate({text: this.constructor.__super__.render.call(this).html()}));
-     //}
     , render: function(withAttributes, renderJSON){
         var that = this;
         var content = _.template(_PopoverMain)({
@@ -98,9 +90,10 @@ define([
       // Make sure the element has been drawn and
       // has height in the dom before triggering.
       PubSub.trigger("tempMove-row", mouseEvent);
-      if (!mouseEvent.isPropagationStopped()){
-    	  PubSub.trigger("tempMove", mouseEvent);
-      }
+      if (mouseEvent.isPropagationStopped()) return;
+      PubSub.trigger("tempMove-panel", mouseEvent);
+      if (mouseEvent.isPropagationStopped()) return;
+      PubSub.trigger("tempMove", mouseEvent);
     }
     , mouseMoveHandler: function(mouseEvent) {
       mouseEvent.preventDefault();
@@ -109,9 +102,10 @@ define([
     , mouseUpHandler: function(mouseEvent){
       mouseEvent.preventDefault();
       PubSub.trigger("tempDrop-row", mouseEvent, this.model);
-      if (!mouseEvent.isPropagationStopped()){
-    	  PubSub.trigger("tempDrop", mouseEvent, this.model);
-      }
+      if (mouseEvent.isPropagationStopped()) {this.remove(); return;}
+      PubSub.trigger("tempDrop-panel", mouseEvent, this.model);
+      if (mouseEvent.isPropagationStopped()) {this.remove(); return;}
+      PubSub.trigger("tempDrop", mouseEvent, this.model);
       this.remove();
     }
   });

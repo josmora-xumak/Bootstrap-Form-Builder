@@ -27,39 +27,69 @@
         "type": "checkbox",
         "value": false
       },
-      "inputsize": {
-        "label": "Input Size",
+      "cols": {
+        "label": "Columns",
         "type": "select",
         "value": [
           {
-            "value": "input-mini",
-            "label": "Mini",
+            "value": "1",
+            "label": "1",
             "selected": false
           },
           {
-            "value": "input-small",
-            "label": "Small",
+            "value": "2",
+            "label": "2",
             "selected": false
           },
           {
-            "value": "input-medium",
-            "label": "Medium",
+            "value": "3",
+            "label": "3",
             "selected": false
           },
           {
-            "value": "input-large",
-            "label": "Large",
+            "value": "4",
+            "label": "4",
             "selected": false
           },
           {
-            "value": "input-xlarge",
-            "label": "Xlarge",
+            "value": "5",
+            "label": "5",
+            "selected": false
+          },
+          {
+            "value": "6",
+            "label": "6",
+            "selected": false
+          },
+          {
+            "value": "7",
+            "label": "7",
+            "selected": false
+          },
+          {
+            "value": "8",
+            "label": "8",
+            "selected": false
+          },
+          {
+            "value": "9",
+            "label": "9",
+            "selected": false
+          },
+          {
+            "value": "10",
+            "label": "10",
+            "selected": false
+          },
+          {
+            "value": "11",
+            "label": "11",
+            "selected": false
+          },
+          {
+            "value": "12",
+            "label": "12",
             "selected": true
-          },
-          {
-            "value": "input-xxlarge",
-            "label": "Xxlarge",
-            "selected": false
           }
         ]
       }

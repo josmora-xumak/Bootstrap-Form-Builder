@@ -32,9 +32,10 @@ define([
           ){
             that.$el.popover('destroy');
             PubSub.trigger("mySnippetDrag-row", mouseDownEvent, that.model);
-            if (typeof(mouseDownEvent._skip_event)=='undefined'){
-            	PubSub.trigger("mySnippetDrag", mouseDownEvent, that.model);
-            }
+            if (typeof(mouseDownEvent._skip_event)!='undefined'){that.mouseUpHandler(); return;}
+            PubSub.trigger("mySnippetDrag-panel", mouseDownEvent, that.model);
+            if (typeof(mouseDownEvent._skip_event)!='undefined'){that.mouseUpHandler(); return;}
+            PubSub.trigger("mySnippetDrag", mouseDownEvent, that.model);
             that.mouseUpHandler();
           };
         });
@@ -53,7 +54,7 @@ define([
     , saveHandler : function(boundContext) {
       return function(mouseEvent) {
         mouseEvent.preventDefault();
-        var fields = $(".popover input.form-control");
+        var fields = $(".popover input.form-control, .popover select");
         _.each(fields, function(e){
           var $e = $(e)
           , type = $e.attr("data-type")

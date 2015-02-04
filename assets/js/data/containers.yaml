@@ -5,3 +5,10 @@
       label  : ID / Name
       type   : div
       value  : row-container
+-
+  title  : Panel Container
+  fields :
+    id:
+      label  : ID / Name
+      type   : div
+      value  : panel-container

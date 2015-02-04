@@ -21,7 +21,7 @@ define([
       this.counter = {};
       this.on("add", this.giveUniqueId);
     }
-
+  	
     , giveUniqueId: function(snippet){
       if(!snippet.get("fresh")) {
         return;
@@ -35,10 +35,10 @@ define([
         this.counter[snippetType] += 1;
       }
 
-      snippet.setField("id", snippetType + "-" + this.counter[snippetType]);
+      snippet.setField("id", snippetType + "-" + this.makeid());
 
       if(typeof snippet.get("fields")["id2"] !== "undefined") {
-        snippet.setField("id2", snippetType + "2-" + this.counter[snippetType]);
+        snippet.setField("id2", snippetType + "2-" + this.makeid());
       }
       PubSub.trigger("UniqueIdGiven", snippet);
     }

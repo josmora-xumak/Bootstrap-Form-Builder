@@ -6,7 +6,27 @@
         "label": "ID / Name",
         "type": "rowcontainer",
         "value": "rowcontainer"
-      }
+      },
+	  "title": {
+	      "label": "Title",
+	      "type": "input",
+	      "value": "row"
+	    }
     }
-  }
+  },
+  {
+	    "title": "Panel Container",
+	    "fields": {
+	      "id": {
+	        "label": "ID / Name",
+	        "type": "panelcontainer",
+	        "value": "panelcontainer"
+	      },
+  		  "title": {
+  			  "label": "Title",
+  			  "type": "input",
+  			  "value": "Panel"
+  		  }
+	    }
+	  }
 ]

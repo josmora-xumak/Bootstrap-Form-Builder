@@ -1,8 +1,7 @@
 <!-- Text input-->
-<div class="form-group">
+<div class="form-group cols-<%- cols %>"> 
   <label class="control-label" for="id_<%- name %>"><%- label %></label>
   <div class="">
     <input id="id_<%- name %>" name="<%- name %>" type="text" placeholder="<%- placeholder %>" class="form-control" <% if(required) {%> required <% } %> />
-    
   </div>
 </div>

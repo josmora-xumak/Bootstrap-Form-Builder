@@ -21,6 +21,7 @@ define(function(require) {
   , selectmultiple           = require('text!templates/snippet/selectmultiple.html')
   , textarea                 = require('text!templates/snippet/textarea.html')
   , rowcontainer             = require('text!templates/snippet/rowcontainer.html')
+  , panelcontainer           = require('text!templates/snippet/panelcontainer.html')
   , textinput                = require('text!templates/snippet/textinput.html');
 
   return {
@@ -46,6 +47,7 @@ define(function(require) {
     , selectmultiple           : selectmultiple
     , textarea                 : textarea
     , rowcontainer             : rowcontainer
+    , panelcontainer           : panelcontainer
     , textinput                : textinput
   }
 });

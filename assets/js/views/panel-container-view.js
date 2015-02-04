@@ -2,7 +2,7 @@ define([
        "jquery", "underscore", "backbone"
       , "views/temp-snippet-view"
       , "helper/pubsub"
-      , "text!templates/app/renderrrowcontainer.html"
+      , "text!templates/app/renderpanelcontainer.html"
 ], function(
   $, _, Backbone
   , TempSnippetView
@@ -11,33 +11,51 @@ define([
 ){
   return Backbone.View.extend({
     tagName: "div"
-    , className: "fb-subtarget row"
+    , className: "fb-subtarget fb-panel"
     , initialize: function(){
-      this.collection.on("add", this.render, this);
+      this.collection.on("add", this.prepare_render, this);
       this.collection.on("remove", this.render, this);
       this.collection.on("change", this.render, this);
-      PubSub.on("mySnippetDrag-row", this.handleSnippetDrag, this);
-      PubSub.on("tempMove-row", this.handleTempMove_row, this);
-      PubSub.on("tempDrop-row", this.handleTempDrop, this);
+      PubSub.on("mySnippetDrag-panel", this.handleSnippetDrag, this);
+      PubSub.on("tempMove-panel", this.handleTempMove_row, this);
+      PubSub.on("tempDrop-panel", this.handleTempDrop, this);
       this.renderForm = _.template(_renderForm);
       this.render();
     }
   	, wrap_in_column: function($inner, collection_length){
-  		var cols_int = -1;
-  		var cols = $inner.find("[class*='cols-']").attr("class");
-  		if (cols){
-  			var re = /\-\d+$/;
-			cols_int = Math.abs(parseInt(cols.match(re)));
-  		}
-  		if (cols_int && cols_int < 12) {
-  			var col_class='col-md-' + cols_int;
-  		} else {
-	  		var col_class='col-md-';
-	  		col_class = col_class + Math.floor(12/collection_length);
-  		}
+  		var col_class='col-md-';
+  		col_class = col_class + Math.floor(12/collection_length);
   		var $col = $('<div class="' + col_class + '"></div>');
   		$inner.appendTo($col);
   		return $col;
+  	}
+  	, prepare_render: function(snippet){
+  		var that = this;
+  		_.map(this.collection.models, function(snippet, k, panel_collection){
+  			if (snippet.attributes.fields.id) {
+	  			var snippetType = snippet.attributes.fields.id.type;
+	  	  		if (snippetType == "rowcontainer") {
+	  	      	  //initialize row-container view
+	  	  		  if (typeof(snippet.row_container_views) == 'undefined') {
+	  	  			snippet.row_container_views = {}
+	  	  		  } 
+	  	  		  if (!(snippet in snippet.row_container_views)){
+	  	  			  var RowContainerView = require("views/row-container-view");
+	  	  			  var RowContainerCollection = require("collections/rowcontainer-collection");
+	  	  			  snippet.setField('title', '');
+	  	  			  var rcv = new RowContainerView({model: snippet, collection: new RowContainerCollection([])});
+	  	  			  snippet.row_container_views[snippet] = rcv;
+	  	  			  that.collection.models[k] = snippet;
+	  	  			  rcv.render();
+	  	  			  rcv.delegateEvents();
+	  	  			  
+	  	  		  } else {
+	  	  			snippet.row_container_views[snippet].delegateEvents();
+	  	  		  }
+	  	  		}
+  			}
+  		});
+  		this.render();
   	}
     , render: function(){
       //Render Snippet Views
@@ -47,16 +65,13 @@ define([
       var collection_length = this.collection.length;
       _.each(this.collection.renderAll(), function(snippet){
     	// adjust drop target
-    	$("div.drop_target", snippet).addClass("drop_sub_target").addClass("col-md-1").parent().addClass("row");
-    	$("div.component", snippet).addClass("col-md-10");
-    	if (!snippet.find(".fb-highlight").length){
-    		snippet = that.wrap_in_column(snippet, collection_length)
-    	}
+    	$("div.drop_target", snippet).addClass("drop_panel_sub_target"); //.addClass("col-md-1").parent().addClass("row");
+    	//$("div.component", snippet).addClass("col-md-11");
         that.$el.append(snippet);
       });
       this.$el.appendTo("#" + this.model.attributes.fields.id.value);
       this.delegateEvents();
-      PubSub.trigger("rowContainerRendered");
+      PubSub.trigger("panelContainerRendered");
     }
 
     , getTarget: function(eventX, eventY){
@@ -112,10 +127,9 @@ define([
            mouseEvent.pageX <= (this.$el.offset().left + this.$el.width()) &&
            mouseEvent.pageY >= this.$el.offset().top &&
            mouseEvent.pageY <= (this.$el.offset().top + this.$el.outerHeight())){
-		    var index = $(".drop_target.drop_sub_target", this.$el).index($(".drop_target.drop_sub_target.hovered"));
+		    var index = $(".drop_target.drop_panel_sub_target", this.$el).index($(".drop_target.drop_panel_sub_target.hovered"));
 		        if (index>-1){
 		        	$(".drop_target").removeClass("hovered");
-		        	$(".fb-subtarget").removeClass("hovered");
 		        	this.$el.removeClass('hovered');
 		        	this.collection.add(model,{at: index+1});
 		        	mouseEvent.stopPropagation();

@@ -5,6 +5,8 @@ define([
       , "text!templates/app/renderform.html"
       , "views/row-container-view"
       , "collections/rowcontainer-collection"
+      , "views/panel-container-view"
+      , "collections/panelcontainer-collection"
 ], function(
   $, _, Backbone
   , TempSnippetView
@@ -12,6 +14,8 @@ define([
   , _renderForm
   , RowContainerView
   , RowContainerCollection
+  , PanelContainerView
+  , PanelContainerCollection
 ){
   return Backbone.View.extend({
     tagName: "fieldset"
@@ -24,6 +28,7 @@ define([
       PubSub.on("tempMove", this.handleTempMove, this);
       PubSub.on("tempDrop", this.handleTempDrop, this);
       PubSub.on("rowContainerRendered", this.render_controls, this);
+      PubSub.on("panelContainerRendered", this.render_controls, this);
       this.$build = $("#build");
       this.build = document.getElementById("build");
       this.buildBCR = this.build.getBoundingClientRect();
@@ -40,12 +45,25 @@ define([
 	  	  			snippet.row_container_views = {}
 	  	  		  } 
 	  	  		  if (!(snippet in snippet.row_container_views)){
+	  	  			  snippet.setField('title', '');
 	  	  			  var rcv = new RowContainerView({model: snippet, collection: new RowContainerCollection([])});
 	  	  			  snippet.row_container_views[snippet] = rcv;
 	  	  		  } else {
 	  	  			snippet.row_container_views[snippet].delegateEvents();
 	  	  		  }
 	  	  		}
+		  	  	if (snippetType == "panelcontainer") {
+		  	      	  //initialize panel-container view
+		  	  		  if (typeof(snippet.panel_container_views) == 'undefined') {
+		  	  			snippet.panel_container_views = {}
+		  	  		  } 
+		  	  		  if (!(snippet in snippet.panel_container_views)){
+		  	  			  var pcv = new PanelContainerView({model: snippet, collection: new PanelContainerCollection([])});
+		  	  			  snippet.panel_container_views[snippet] = pcv;
+		  	  		  } else {
+		  	  			snippet.panel_container_views[snippet].delegateEvents();
+		  	  		  }
+		  	  		}
   			}
   		});
   		this.render();
@@ -121,7 +139,7 @@ define([
     }
 
     , handleTempDrop: function(mouseEvent, model, index){
-        var index = $(".drop_target:not(.drop_sub_target)").index($(".drop_target.hovered"));
+        var index = $(".drop_target:not(.drop_sub_target):not(.drop_panel_sub_target)").index($(".drop_target.hovered"));
         if (index>-1){
         	$(".drop_target").removeClass("hovered");
         	this.collection.add(model,{at: index+1});
