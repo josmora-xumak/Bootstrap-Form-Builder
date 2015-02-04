@@ -107,7 +107,7 @@ define([
     , getTarget: function(eventX, eventY){
       var myFormBits = $(this.$el.find(".drop_target"));
       var topelement = _.find(myFormBits, function(renderedSnippet) {
-    	if (eventY >= $(renderedSnippet).position().top  && eventY <= ($(renderedSnippet).position().top + $(renderedSnippet).height())) {
+    	if (eventY >= $(renderedSnippet).offset()().top  && eventY <= ($(renderedSnippet).offset()().top + $(renderedSnippet).height())) {
           return true;
         }
         else {

@@ -12,7 +12,7 @@ define([
   , "models/snippet-model"
   , "views/row-container-view"
   , "views/panel-container-view"
-  , "bootstrap"
+  //, "bootstrap"
 ], function(
   $, _, Backbone
   , _PopoverMain

@@ -54,12 +54,13 @@ define([
        */
 
       //Make the first tab active!
-      $("#components .tab-pane").first().addClass("active");
-      $("#formtabs li").first().addClass("active");
+      $("#containers .tab-pane").first().addClass("active");
+      $("#formtabs li:eq(0)").first().addClass("active");
+      //$('#formtabs li:eq(0) a').tab('show');
       if (window.form_builder_initial_data){
     	  new MyFormView({
               title: "Original"
-              , collection: new MyFormSnippetsCollection([window.form_builder_initial_data])
+              , collection: new MyFormSnippetsCollection(window.form_builder_initial_data)
             });
       } else {
     	  new MyFormView({
