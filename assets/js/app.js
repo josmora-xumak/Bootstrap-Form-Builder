@@ -6,7 +6,6 @@ define([
        , "text!data/containers.json"
        , "text!" + window.form_fields_resource
        , "text!templates/app/render.html",
-       //, "bootstrap"
 ], function(
   $, _, Backbone
   , SnippetsCollection, MyFormSnippetsCollection

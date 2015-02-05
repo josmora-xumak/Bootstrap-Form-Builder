@@ -74,10 +74,14 @@ define([
   		$('.fb-subtarget.row', $rendered).unwrap().removeClass("fb-subtarget");
   		$('div.form-group', $rendered).unwrap();
   		$('.form-control', $rendered).unwrap();
-  		$('legend', $rendered).unwrap();
   		$('legend', $rendered).remove();
   		var $container = $("<div class='container'></div>");
-  		$($rendered.html()).appendTo($container);
+  		if ($('fieldset', $rendered).length > 0) {
+  			$($rendered.find('fieldset').html()).appendTo($container);
+  		} else {
+  			$($rendered.html()).appendTo($container);
+  		}
+  		$(".fb-subtarget.fb-panel", $container).children(":eq(0)").unwrap()
   		return "<body>" + $("<div></div>").append($container).html() + "</body>";
   	}
   	, render_controls: function(){
@@ -108,6 +112,7 @@ define([
           multipart: this.collection.containsFileType(),
           text: text
         })
+      rendered = this.cleanup_rendered(rendered);
       $("#render").val(rendered);
 
       var rendered_collection_json = this.collection.renderAllJSON();
