@@ -12,7 +12,7 @@ define([
   , "models/snippet-model"
   , "views/row-container-view"
   , "views/panel-container-view"
-  //, "bootstrap"
+  , "bootstrap"
 ], function(
   $, _, Backbone
   , _PopoverMain
@@ -157,9 +157,8 @@ define([
         if (typeof(this.model.panel_container_views) != 'undefined'){
      		var $current_panel_container = $("#" + this.model.attributes.fields.id.value, content);
      		_.each(this.model.panel_container_views, function(pcv, key){
-     			
      			var current_view_html = pcv.$el.clone();
-     			var current_rows = $('.container-fluid.fb-highlight', current_view_html).unwrap();
+     			var current_rows = $('.container-fluid.fb-highlight', current_view_html).unwrap().unwrap();
      			var current_view_groups = $('div.form-group', current_view_html).unwrap();
      			current_view_html.appendTo($current_panel_container);
      			current_view_html.find(".drop_target").remove();

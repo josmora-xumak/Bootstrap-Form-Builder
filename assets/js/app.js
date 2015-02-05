@@ -6,6 +6,7 @@ define([
        , "text!data/containers.json"
        , "text!" + window.form_fields_resource
        , "text!templates/app/render.html",
+       , "bootstrap"
 ], function(
   $, _, Backbone
   , SnippetsCollection, MyFormSnippetsCollection
@@ -54,9 +55,9 @@ define([
        */
 
       //Make the first tab active!
-      $("#containers .tab-pane").first().addClass("active");
-      $("#formtabs li:eq(0)").first().addClass("active");
-      //$('#formtabs li:eq(0) a').tab('show');
+      $(".tab-pane#containers ").first().addClass("active");
+      $("#formtabs li:eq(0)").addClass("active");
+      
       if (window.form_builder_initial_data){
     	  new MyFormView({
               title: "Original"

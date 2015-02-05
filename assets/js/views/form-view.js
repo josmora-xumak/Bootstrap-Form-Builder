@@ -68,6 +68,18 @@ define([
   		});
   		this.render();
   	}
+  	, cleanup_rendered: function(rendered){
+  		var $rendered = $(rendered);
+  		$('.container-fluid.fb-highlight', $rendered).unwrap();
+  		$('.fb-subtarget.row', $rendered).unwrap().removeClass("fb-subtarget");
+  		$('div.form-group', $rendered).unwrap();
+  		$('.form-control', $rendered).unwrap();
+  		$('legend', $rendered).unwrap();
+  		$('legend', $rendered).remove();
+  		var $container = $("<div class='container'></div>");
+  		$($rendered.html()).appendTo($container);
+  		return "<body>" + $("<div></div>").append($container).html() + "</body>";
+  	}
   	, render_controls: function(){
   		var that = this;
   		var rendered_collection = this.collection.renderAllClean();
@@ -76,6 +88,7 @@ define([
             multipart: this.collection.containsFileType(),
             text: text
           })
+        rendered = this.cleanup_rendered(rendered);
         $("#render").val(rendered);
         
         var rendered_collection_json = this.collection.renderAllJSON();
@@ -107,7 +120,7 @@ define([
     , getTarget: function(eventX, eventY){
       var myFormBits = $(this.$el.find(".drop_target"));
       var topelement = _.find(myFormBits, function(renderedSnippet) {
-    	if (eventY >= $(renderedSnippet).offset()().top  && eventY <= ($(renderedSnippet).offset()().top + $(renderedSnippet).height())) {
+    	if (eventY >= $(renderedSnippet).offset().top  && eventY <= ($(renderedSnippet).offset().top + $(renderedSnippet).height())) {
           return true;
         }
         else {
